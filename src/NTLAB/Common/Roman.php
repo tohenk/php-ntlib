@@ -143,6 +143,16 @@ class Roman
     }
 
     /**
+     * Get the maximum number digit allowed.
+     *
+     * @return int
+     */
+    protected static function getMaxDigit()
+    {
+        return ceil(strlen(static::$chars) / 2);
+    }
+
+    /**
      * Convert roman characters into integer.
      *
      * @param string $s
@@ -187,6 +197,9 @@ class Roman
         if ($value > 0) {
             $s = strval($value);
             $digit = strlen($s);
+            if ($digit > self::getMaxDigit()) {
+                return;
+            }
             for ($i = 0; $i < $digit; $i ++) {
                 $val = intval($s[$i]);
                 $index = ($digit - $i - 1) * 2;
