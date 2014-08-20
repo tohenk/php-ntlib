@@ -176,6 +176,7 @@ class Beautifier
     {
         $result = null;
 
+        $str = (string) $str;
         while (true) {
             if (0 === strlen(trim($str))) {
                 break;
