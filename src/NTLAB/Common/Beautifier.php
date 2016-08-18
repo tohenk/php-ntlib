@@ -127,7 +127,7 @@ class Beautifier
                     break;
                 }
             }
-            $i ++;
+            $i++;
         }
         if ($pos == null) {
             $pos = strlen($str);
@@ -155,7 +155,7 @@ class Beautifier
         }
 
         $s = strtolower($str);
-        for ($i = 0; $i < strlen($s); $i ++) {
+        for ($i = 0; $i < strlen($s); $i++) {
             $is_delim = static::isDelimeter($s[$i]);
             if (! $is_delim) {
                 $s[$i] = strtoupper($s[$i]);

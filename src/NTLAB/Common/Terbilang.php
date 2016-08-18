@@ -120,8 +120,7 @@ class Terbilang
     /**
      * Process terbilang for value under a thousand.
      *
-     * @param string $str
-     *            The value
+     * @param string $str  The value
      * @return string
      */
     protected function terbilang3($str)
@@ -169,10 +168,8 @@ class Terbilang
     /**
      * Process terbilang.
      *
-     * @param string $str
-     *            The value
-     * @param bool $leading_zero
-     *            Include leading zero
+     * @param string $str  The value
+     * @param bool $leading_zero  Include leading zero
      * @return string
      */
     protected function terbilang($str, $leading_zero = false)

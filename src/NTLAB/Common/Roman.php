@@ -128,7 +128,7 @@ class Roman
     }
 
     /**
-     * Convert roman character to integer based on it's base value.
+     * Convert roman value to integer based on it's base value.
      *
      * @param string $char
      * @return int
@@ -153,10 +153,9 @@ class Roman
     }
 
     /**
-     * Convert roman characters into integer.
+     * Convert roman value into integer.
      *
-     * @param string $s
-     *            roman characters
+     * @param string $s  Roman value
      * @return int
      */
     public static function asInteger($s)
@@ -188,7 +187,7 @@ class Roman
     /**
      * Convert integer to roman characters.
      *
-     * @param int $value            
+     * @param int $value  Integer value
      * @return string roman characters.
      */
     public static function asRoman($value)
@@ -200,7 +199,7 @@ class Roman
             if ($digit > self::getMaxDigit()) {
                 return;
             }
-            for ($i = 0; $i < $digit; $i ++) {
+            for ($i = 0; $i < $digit; $i++) {
                 $val = intval($s[$i]);
                 $index = ($digit - $i - 1) * 2;
                 switch ($val) {
