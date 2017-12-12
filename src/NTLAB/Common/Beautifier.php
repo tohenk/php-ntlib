@@ -30,17 +30,34 @@ class Beautifier
 {
     const IGNORE_NONE = 0;
     const IGNORE_ROMAN = 1;
-    const IGNORE_EXCEPTION = 2;
+    const IGNORE_INLIST = 2;
 
-    protected static $exceptions = array();
     protected static $delimeters = ' /-()';
+    protected static $ignores = array();
 
     /**
-     * Add beautify exception.
+     * Load ignored texts.
      *
-     * @param array $array  The exception text
+     * @param string $filename  Filename
+     * @return boolean true if loaded
      */
-    public static function addException($array = array())
+    public static function loadIgnores($filename)
+    {
+        if (is_readable($filename)) {
+            self::addIgnore(file($filename));
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Add ignored text which the case is stay unchanged.
+     *
+     * @param array $array  The ignored text
+     */
+    public static function addIgnore($array = array())
     {
         if (null === $array || false === $array) {
             return;
@@ -50,31 +67,29 @@ class Beautifier
         }
         foreach ($array as $a) {
             $a = trim($a);
-            if (!in_array($a, static::$exceptions)) {
-                static::$exceptions[] = $a;
+            if (!in_array($a, static::$ignores)) {
+                static::$ignores[] = $a;
             }
         }
     }
 
     /**
-     * Load beutify exception.
+     * Get ignored text.
      *
-     * @param string $filename  Exception filename
-     * @return boolean true if loaded
+     * @param string $str  The text
+     * @return string
      */
-    public static function loadException($filename)
+    protected static function getIgnored($str)
     {
-        if (is_readable($filename)) {
-            self::addException(file($filename));
-
-            return true;
+        foreach (static::$ignores as $ignored) {
+            if (strtolower($str) == strtolower($ignored)) {
+                return $ignored;
+            }
         }
-
-        return false;
     }
 
     /**
-     * Check if input is a beauty delimeter.
+     * Check if input is a delimeter.
      *
      * @param string $char
      * @return boolean
@@ -89,35 +104,17 @@ class Beautifier
     }
 
     /**
-     * Is text found in exception.
-     *
-     * @param string $str  The text
-     * @return boolean
-     */
-    protected static function isInException($str)
-    {
-        foreach (static::$exceptions as $except) {
-            if (strtolower($str) == strtolower($except)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Extract string based on delimeter to beautified.
+     * Extract string based on delimeter.
      *
      * @param string $str
      * @return string
      */
-    protected static function extractStr($str)
+    protected static function extract($str)
     {
         $i = 0;
         $pos = null;
         while (true) {
-            $is_delim = static::isDelimeter($str[$i]);
-            if ($is_delim) {
+            if (self::isDelimeter($str[$i])) {
                 $pos = $i;
                 if ($pos > 0 || $i == strlen($str) - 1) {
                     break;
@@ -150,14 +147,15 @@ class Beautifier
             return $str;
         }
         // exclude from beauty if found in exception list
-        if (($flag & static::IGNORE_EXCEPTION) === 0 && static::isInException($str)) {
-            return $str;
+        if (($flag & static::IGNORE_INLIST) === 0) {
+            if (null !== ($ignore = self::getIgnored($str))) {
+                return $ignore;
+            }
         }
 
         $s = strtolower($str);
         for ($i = 0; $i < strlen($s); $i++) {
-            $is_delim = static::isDelimeter($s[$i]);
-            if (! $is_delim) {
+            if (!self::isDelimeter($s[$i])) {
                 $s[$i] = strtoupper($s[$i]);
                 break;
             }
@@ -181,8 +179,8 @@ class Beautifier
             if (0 === strlen(trim($str))) {
                 break;
             }
-            $bs = static::extractStr($str);
-            $beauty = static::beautifyStr($bs, $flag);
+            $bs = self::extract($str);
+            $beauty = self::beautifyStr($bs, $flag);
             $pos = strpos($str, $bs) + strlen($bs) + 1;
             $matched = false;
             if ($pos >= strlen($str)) {
@@ -194,7 +192,7 @@ class Beautifier
                 $tmp = str_replace($bs, $beauty, $tmp);
             }
             $result .= $tmp;
-            if (! $matched) {
+            if (!$matched) {
                 $str = substr($str, $pos);
             } else {
                 break;
