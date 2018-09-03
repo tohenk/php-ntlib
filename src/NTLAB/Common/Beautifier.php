@@ -143,11 +143,11 @@ class Beautifier
     protected static function beautifyStr($str, $flag)
     {
         // exclude from beauty if roman chars is detected
-        if (($flag & static::IGNORE_ROMAN) === 0 && is_int(Roman::asInteger($str))) {
+        if (($flag & static::IGNORE_ROMAN) === static::IGNORE_ROMAN && is_int(Roman::asInteger($str))) {
             return $str;
         }
         // exclude from beauty if found in exception list
-        if (($flag & static::IGNORE_INLIST) === 0) {
+        if (($flag & static::IGNORE_INLIST) === static::IGNORE_INLIST) {
             if (null !== ($ignore = self::getIgnored($str))) {
                 return $ignore;
             }
