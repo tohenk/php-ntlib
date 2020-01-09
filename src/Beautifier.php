@@ -148,8 +148,8 @@ class Beautifier
         }
         // exclude from beauty if found in exception list
         if (($flag & static::IGNORE_INLIST) === static::IGNORE_INLIST) {
-            if (null !== ($ignore = self::getIgnored($str))) {
-                return $ignore;
+            if (null !== self::getIgnored($str)) {
+                return $str;
             }
         }
 

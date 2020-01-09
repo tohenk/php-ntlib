@@ -45,7 +45,7 @@ class Terbilang
     protected $decimal = null;
 
     /**
-     * @var NTLAB\Common\Terbilang
+     * @var \NTLAB\Common\Terbilang
      */
     protected static $instance = null;
 
@@ -244,6 +244,8 @@ class Terbilang
         if (!is_string($value)) {
             $value = (string) $value;
         }
+        $number = null;
+        $frac = null;
         $this->splitDecimal($value, $number, $frac);
         $result = $this->terbilang($number, false);
         if ($decimal && $frac) {
