@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -33,7 +33,7 @@ class Beautifier
     const IGNORE_INLIST = 2;
 
     protected static $delimeters = ' /-()';
-    protected static $ignores = array();
+    protected static $ignores = [];
 
     /**
      * Load ignored texts.
@@ -45,10 +45,8 @@ class Beautifier
     {
         if (is_readable($filename)) {
             self::addIgnore(file($filename));
-
             return true;
         }
-
         return false;
     }
 
@@ -57,13 +55,13 @@ class Beautifier
      *
      * @param array $array  The ignored text
      */
-    public static function addIgnore($array = array())
+    public static function addIgnore($array = [])
     {
         if (null === $array || false === $array) {
             return;
         }
         if (!is_array($array)) {
-            $array = array($array);
+            $array = [$array];
         }
         foreach ($array as $a) {
             $a = trim($a);
@@ -99,7 +97,6 @@ class Beautifier
         if (false !== strpos(static::$delimeters, $char)) {
             return true;
         }
-
         return false;
     }
 
@@ -129,7 +126,6 @@ class Beautifier
         if ($pos == null) {
             $pos = strlen($str);
         }
-
         return substr($str, 0, $pos);
     }
 
@@ -152,7 +148,6 @@ class Beautifier
                 return $ignored;
             }
         }
-
         $s = strtolower($str);
         for ($i = 0; $i < strlen($s); $i++) {
             if (!self::isDelimeter($s[$i])) {
@@ -160,7 +155,6 @@ class Beautifier
                 break;
             }
         }
-
         return $s;
     }
 
@@ -173,7 +167,6 @@ class Beautifier
     public static function beautify($str, $flag = self::IGNORE_NONE)
     {
         $result = null;
-
         $str = (string) $str;
         while (true) {
             if (0 === strlen(trim($str))) {
@@ -198,7 +191,6 @@ class Beautifier
                 break;
             }
         }
-
         return $result;
     }
 }

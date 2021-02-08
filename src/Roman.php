@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -31,7 +31,7 @@ class Roman
     const BASE1_COUNT = 3;
     const BASE2_COUNT = 1;
 
-    protected static $values = array(1, 5);
+    protected static $values = [1, 5];
 
     protected static $chars = 'IVXLCDM';
 
@@ -123,7 +123,6 @@ class Roman
                 $lastMatch = $matchCount;
             }
         }
-
         return true;
     }
 
@@ -138,7 +137,6 @@ class Roman
         $index = static::getCharIndex($char);
         $base = static::$values[$index % 2];
         $digit = (int) ($index / 2);
-
         return (int) $base * ('1e+' . $digit);
     }
 
@@ -180,7 +178,6 @@ class Roman
                 break;
             }
         }
-
         return (int) $result;
     }
 
@@ -205,13 +202,11 @@ class Roman
                 switch ($val) {
                     case 0:
                         break;
-
                     case 1:
                     case 2:
                     case 3:
                         $result .= str_repeat(static::$chars[$index], $val);
                         break;
-
                     case 4:
                         // value is too high, e.g. >= 4000
                         if ($index + 1 >= strlen(static::$chars)) {
@@ -219,7 +214,6 @@ class Roman
                         }
                         $result .= substr(static::$chars, $index, 2);
                         break;
-
                     case 5:
                     case 6:
                     case 7:
@@ -229,14 +223,12 @@ class Roman
                             $result .= str_repeat(static::$chars[$index], $val - 5);
                         }
                         break;
-
                     case 9:
                         $result .= static::$chars[$index] . static::$chars[$index + 2];
                         break;
                 }
             }
         }
-
         return $result;
     }
 }

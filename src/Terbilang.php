@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2021 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -39,9 +39,9 @@ class Terbilang
     const DECIMAL_PER = 3;
     const DECIMAL_CUSTOM = 4;
 
-    protected $numbers = array('NOL', 'SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM', 'TUJUH', 'DELAPAN', 'SEMBILAN');
-    protected $hundreds = array('', self::TERBILANG_PULUH, self::TERBILANG_RATUS);
-    protected $thousands = array('', 'RIBU', 'JUTA', 'MILYAR', 'TRILYUN', 'BILYUN');
+    protected $numbers = ['NOL', 'SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM', 'TUJUH', 'DELAPAN', 'SEMBILAN'];
+    protected $hundreds = ['', self::TERBILANG_PULUH, self::TERBILANG_RATUS];
+    protected $thousands = ['', 'RIBU', 'JUTA', 'MILYAR', 'TRILYUN', 'BILYUN'];
     protected $decimal = null;
 
     /**
@@ -56,10 +56,9 @@ class Terbilang
      */
     public static function getInstance()
     {
-        if (null == static::$instance) {
+        if (null === static::$instance) {
             static::$instance = new self();
         }
-
         return static::$instance;
     }
 
@@ -94,7 +93,6 @@ class Terbilang
             $result .= $this->numbers[0];
             $str = substr($str, 1, strlen($str) - 1);
         }
-
         return $result;
     }
 
@@ -113,7 +111,6 @@ class Terbilang
             }
             $str .= $satuan;
         }
-
         return $str;
     }
 
@@ -161,7 +158,6 @@ class Terbilang
                 $i++;
             }
         }
-
         return trim($result);
     }
 
@@ -194,7 +190,6 @@ class Terbilang
         if ($leading_zero && $zero) {
             $result = trim($zero.static::TERBILANG_SEPARATOR.$result);
         }
-
         return $result;
     }
 
@@ -227,7 +222,6 @@ class Terbilang
     public function setCustomDecimal($value)
     {
         $this->decimal = $value;
-
         return $this;
     }
 
@@ -255,18 +249,15 @@ class Terbilang
                         $result .= ', '.$fracs;
                     }
                     break;
-
                 case static::DECIMAL_COMMA:
                     if ($fracs = $this->terbilang($frac, true)) {
                         $result .= ' KOMA '.$fracs;
                     }
                     break;
-
                 case static::DECIMAL_PER:
                     $result .= static::TERBILANG_SEPARATOR.$this->terbilang((string) (int) $frac, false);
                     $result .= ' PER '.$this->terbilang('1'.str_repeat('0', strlen($frac)), false);
                     break;
-
                 case static::DECIMAL_CUSTOM:
                     if ($fracs = $this->terbilang($frac, true)) {
                         $result .= $this->decimal.$fracs;
@@ -274,7 +265,6 @@ class Terbilang
                     break;
             }
         }
-
         return $result;
     }
 }
