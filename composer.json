@@ -21,7 +21,7 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"NTLAB\\Common\\" : "src/"
+			"NTLAB\\Lib\\" : "src/"
 		}
 	}
 }

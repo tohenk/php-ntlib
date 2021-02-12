@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\Common;
+namespace NTLAB\Lib\Common;
 
 class Terbilang
 {
@@ -45,14 +45,14 @@ class Terbilang
     protected $decimal = null;
 
     /**
-     * @var \NTLAB\Common\Terbilang
+     * @var \NTLAB\Lib\Common\Terbilang
      */
     protected static $instance = null;
 
     /**
      * Get instance.
      *
-     * @return \NTLAB\Common\Terbilang
+     * @return \NTLAB\Lib\Common\Terbilang
      */
     public static function getInstance()
     {
@@ -217,7 +217,7 @@ class Terbilang
      * Set custom decimal separator.
      *
      * @param string $value  The decimal separator
-     * @return \NTLAB\Common\Terbilang
+     * @return \NTLAB\Lib\Common\Terbilang
      */
     public function setCustomDecimal($value)
     {

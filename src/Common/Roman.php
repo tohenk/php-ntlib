@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\Common;
+namespace NTLAB\Lib\Common;
 
 class Roman
 {

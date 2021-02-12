@@ -1,8 +1,8 @@
 <?php
 
-namespace NTLAB\Common\Test;
+namespace NTLAB\Lib\Test;
 
-use NTLAB\Common\Gelar;
+use NTLAB\Lib\Common\Gelar;
 
 class GelarTest extends BaseTest
 {

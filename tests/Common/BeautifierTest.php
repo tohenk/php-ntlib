@@ -1,8 +1,8 @@
 <?php
 
-namespace NTLAB\Common\Test;
+namespace NTLAB\Lib\Test;
 
-use NTLAB\Common\Beautifier;
+use NTLAB\Lib\Common\Beautifier;
 
 class BeutifierTest extends BaseTest
 {

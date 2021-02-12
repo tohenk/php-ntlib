@@ -1,8 +1,8 @@
 <?php
 
-namespace NTLAB\Common\Test;
+namespace NTLAB\Lib\Test;
 
-use NTLAB\Common\Roman;
+use NTLAB\Lib\Common\Roman;
 
 class RomanTest extends BaseTest
 {

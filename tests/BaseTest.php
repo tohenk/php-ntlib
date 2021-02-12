@@ -1,6 +1,6 @@
 <?php
 
-namespace NTLAB\Common\Test;
+namespace NTLAB\Lib\Test;
 
 use PHPUnit\Framework\TestCase;
 

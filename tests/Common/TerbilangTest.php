@@ -1,8 +1,8 @@
 <?php
 
-namespace NTLAB\Common\Test;
+namespace NTLAB\Lib\Test;
 
-use NTLAB\Common\Terbilang;
+use NTLAB\Lib\Common\Terbilang;
 
 class TerbilangTest extends BaseTest
 {
