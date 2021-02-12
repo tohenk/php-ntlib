@@ -50,3 +50,37 @@ use NTLAB\Lib\Common\Gelar;
 
 echo Gelar::strip('Drs. IHSAN SAPUTRA, M.Si'); // IHSAN SAPUTRA
 ```
+
+## Identity Library
+
+### NIK
+
+NIK encoder/decoder.
+
+```php
+<?php
+
+use NTLAB\Lib\Identity\Ids\Nik;
+
+$nik = new Nik('3515155202000005');
+echo $nik->getWilayah(); // 351515
+echo $nik->getTglLahir()->format('d-m-Y'); // 12-02-2000
+echo $nik->getGender(); // P
+echo $nik->getUrut(); // 5
+```
+
+### NIP
+
+NIP encoder/decoder.
+
+```php
+<?php
+
+use NTLAB\Lib\Identity\Ids\Nip;
+
+$nip = new Nip('199909272020011004');
+echo $nip->getTglLahir()->format('d-m-Y'); // 27-09-1999
+echo $nip->getTmtCapeg()->format('d-m-Y'); // 01-01-2020
+echo $nip->getGender(); // 1
+echo $nip->getUrut(); // 4
+```
