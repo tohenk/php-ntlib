@@ -166,6 +166,30 @@ abstract class Validator
     }
 
     /**
+     * Create a comparable from array with specified keys.
+     *
+     * @param array $keys
+     * @param array $values
+     * @return \stdClass
+     */
+    public function createComparableUsingKeys($keys, $values)
+    {
+        $data = [];
+        $valueKeys = array_keys($values);
+        $normalizedKeys = array_map('strtolower', $valueKeys);
+        foreach ($keys as $key)  {
+            if (isset($values[$key])) {
+                $data[$key] = $values[$key];
+            } else if (false !== ($pos = array_search($key, $normalizedKeys))) {
+                $data[$key] = $values[$valueKeys[$pos]];
+            }
+        }
+        if ($data) {
+            return $this->createComparable($data);
+        }
+    }
+
+    /**
      * Compare value.
      *
      * @param mixed $value1
@@ -197,6 +221,8 @@ abstract class Validator
     {
         $values1 = get_object_vars($id1);
         $values2 = get_object_vars($id2);
+        error_log(var_export($values1, true));
+        error_log(var_export($values2, true));
         if (count(array_diff_key($values1, $values2))) {
             return false;
         }

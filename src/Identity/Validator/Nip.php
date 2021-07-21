@@ -63,11 +63,8 @@ class Nip extends Validator
     {
         if (($provider = $this->getProvider()) && null !== ($info = $provider->query($id))) {
             $this->data = $info;
-            if (is_array($info)) {
-                if (isset($info[$this->keyDob]) && isset($info[$this->keyGender])) {
-                    $comparable2 = $this->getIdComparable($info);
-                    return $this->cmpId($comparable, $comparable2);
-                }
+            if (is_array($info) && ($comparable2 = $this->createComparableUsingKeys([$this->keyDob, $this->keyGender], $info))) {
+                return $this->cmpId($comparable, $comparable2);
             }
             return false;
         }
