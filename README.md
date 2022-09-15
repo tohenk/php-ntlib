@@ -84,3 +84,17 @@ echo $nip->getTmtCapeg()->format('d-m-Y'); // 01-01-2020
 echo $nip->getGender(); // 1
 echo $nip->getUrut(); // 4
 ```
+
+### NRP
+
+NRP encoder/decoder.
+
+```php
+<?php
+
+use NTLAB\Lib\Identity\Ids\Nrp;
+
+$nrp = new Nrp('96090050');
+echo $nrp->getLahir()->format('d-m-Y'); // 01-09-1996
+echo $nrp->getUrut(); // 50
+```

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2022 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,39 +24,52 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\Lib\Identity\Provider;
+namespace NTLAB\Lib\Identity\Ids;
+
+use NTLAB\Lib\Identity\Identity;
+use NTLAB\Lib\Identity\SequenceDate;
+use NTLAB\Lib\Identity\SequenceSerial;
 
 /**
- * An identity provider base class.
+ * NRP (Nomor Register Pokok) decode/encode utility.
  *
  * @author Toha
  */
-abstract class Provider implements ProviderInterface
+class Nrp extends Identity
 {
-    /**
-     * @var string
-     */
-    protected $name = null;
+    const NRP_LAHIR = 'lahir';
+    const NRP_SEQUENCE = 'seq';
 
     /**
      * Constructor.
+     *
+     * @param string $nrp  NRP
      */
-    public function __construct()
+    public function __construct($nrp = null)
     {
-        $this->initialize();
-    }
-
-    protected function initialize()
-    {
+        $this
+            ->addSeq(new SequenceDate(4, self::NRP_LAHIR, 'ym'))
+            ->addSeq(new SequenceSerial(4, self::NRP_SEQUENCE))
+            ->decode($nrp);
     }
 
     /**
-     * Get provider name.
+     * Get date of birth (only year and month of DOB).
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getName()
+    public function getLahir()
     {
-        return $this->name;
+        return $this->getValue(self::NRP_LAHIR);
+    }
+
+    /**
+     * Get sequence.
+     *
+     * @return int
+     */
+    public function getUrut()
+    {
+        return $this->getValue(self::NRP_SEQUENCE);
     }
 }
