@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2022 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -175,7 +175,7 @@ abstract class Identity
         foreach ($this->sequences as $seq) {
             $raws[] = $seq->getRaw();
         }
-        return implode($separator, $raws);
+        return implode((string) $separator, $raws);
     }
 
     public function __toString()
