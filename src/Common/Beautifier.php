@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -39,7 +39,7 @@ class Beautifier
      * Load ignored texts.
      *
      * @param string $filename  Filename
-     * @return boolean true if loaded
+     * @return bool true if loaded
      */
     public static function loadIgnores($filename)
     {
@@ -90,7 +90,7 @@ class Beautifier
      * Check if input is a delimeter.
      *
      * @param string $char
-     * @return boolean
+     * @return bool
      */
     protected static function isDelimeter($char)
     {

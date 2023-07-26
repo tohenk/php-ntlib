@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -57,10 +57,24 @@ abstract class Identity
     }
 
     /**
+     * Get identity length.
+     *
+     * @return int
+     */
+    public function getLength()
+    {
+        $len = 0;
+        foreach ($this->sequences as $seq) {
+            $len += $seq->getSize();
+        }
+        return $len;
+    }
+
+    /**
      * Decode value.
      *
      * @param string $value
-     * @return boolean
+     * @return bool
      */
     public function decode($value)
     {
@@ -86,14 +100,14 @@ abstract class Identity
      * Each value to encode must be passed using setValue(). Once success,
      * encoded value can be retrieved using getRaw().
      *
-     * @return boolean
+     * @return bool
      */
     public function encode()
     {
         $raws = [];
         $count = 0;
         foreach ($this->sequences as $seq) {
-            if (! $seq->hasValues()) {
+            if (!$seq->hasValues()) {
                 break;
             }
             $raws[] = $seq->encode()->getRaw();
@@ -139,18 +153,36 @@ abstract class Identity
     }
 
     /**
-     * Is decoded value valid.
+     * Is decoded value valid?
      *
-     * @return boolean
+     * @return bool
      */
     public function isValid()
     {
         foreach ($this->sequences as $seq) {
-            if (! $seq->hasValues()) {
+            if (!$seq->hasValues()) {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * Is identity length satisfied?
+     *
+     * @return bool
+     */
+    public function isLenValid()
+    {
+        if (null !== $this->raw) {
+            return $this->checkLength($this->raw);
+        }
+        return false;
+    }
+
+    protected function checkLength($value)
+    {
+        return strlen($value) === $this->getLength();
     }
 
     /**

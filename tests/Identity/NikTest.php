@@ -13,10 +13,19 @@ class NikTest extends BaseTest
         $nik = new Nik('3515155202000005');
         $date = new \DateTime();
         $date->setTimestamp(mktime(0, 0, 0, 2, 12, 2000));
+        $this->assertTrue($nik->isLenValid(), 'Length of NIK is 16');
         $this->assertEquals('351515', $nik->getWilayah(), 'Properly decode wilayah');
         $this->assertEquals($date, $nik->getTglLahir(), 'Properly decode date of birth');
         $this->assertEquals('P', $nik->getGender(), 'Properly decode gender');
         $this->assertEquals(5, $nik->getUrut(), 'Properly decode urut');
+    }
+
+    public function testNikInvalid()
+    {
+        $nik = new Nik('351515520200005');
+        $this->assertFalse($nik->isLenValid(), 'Length of NIK must be 16');
+        $nik = new Nik('35151552020000005');
+        $this->assertFalse($nik->isLenValid(), 'Length of NIK must be 16');
     }
 
     public function testValidator()

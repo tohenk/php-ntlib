@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -49,6 +49,7 @@ class Nip extends Validator
         $this->id = 'NIP';
         $this->title = 'Validasi ID dengan Nomor Induk Pegawai (NIP)';
         $this->label = 'Nomor Induk Pegawai (NIP)';
+        $this->identityClass = NipIdentity::class;
     }
 
     protected function getIdComparable($values)
@@ -70,9 +71,15 @@ class Nip extends Validator
         }
     }
 
-    protected function compareIdUsingIdentity($id, $comparable)
+    /**
+     * Compare identity.
+     *
+     * @param \NTLAB\Lib\Identity\Ids\Nip $nip
+     * @param \stdClass $comparable
+     * @return bool
+     */
+    protected function compareIdUsingIdentity($nip, $comparable)
     {
-        $nip = new NipIdentity($id);
         $comparable2 = $this->getIdComparable([
             $this->keyDob => $nip->getTglLahir(),
             $this->keyGender => $nip->getGender(),
@@ -94,7 +101,7 @@ class Nip extends Validator
                 return $result;
             }
             // validate using decoded dob and gender
-            return $this->compareIdUsingIdentity($id, $comparable);
+            return $this->compareIdUsingIdentity($this->createIdentity($id), $comparable);
         }
     }
 }

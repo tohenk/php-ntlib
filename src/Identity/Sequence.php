@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -89,7 +89,7 @@ class Sequence
      * Is key exist.
      *
      * @param string $key
-     * @return boolean
+     * @return bool
      */
     public function hasKey($key)
     {
@@ -193,7 +193,7 @@ class Sequence
     /**
      * Is all values exist.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasValues()
     {

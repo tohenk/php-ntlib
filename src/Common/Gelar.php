@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -89,7 +89,7 @@ class Gelar
      */
     public static function add($gelar)
     {
-        if (!in_array(self::$gelars)) {
+        if (!in_array($gelar, self::$gelars)) {
             self::$gelars[] = $gelar;
         }
     }

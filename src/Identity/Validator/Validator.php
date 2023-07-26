@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -62,6 +62,11 @@ abstract class Validator
     protected $provider = null;
 
     /**
+     * @var string
+     */
+    protected $identityClass = null;
+
+    /**
      * Constructor.
      *
      * @param ProviderInterface $provider
@@ -87,7 +92,7 @@ abstract class Validator
     }
 
     /**
-     * Get Id validator id.
+     * Get id validator id.
      *
      * @return string
      */
@@ -130,7 +135,7 @@ abstract class Validator
      * Validate an id.
      *
      * @param array $values
-     * @return boolean
+     * @return bool
      */
     public function validate($values)
     {
@@ -142,10 +147,24 @@ abstract class Validator
      * Internal handler for validation.
      *
      * @param array $values
-     * @return boolean
+     * @return bool
      */
     protected function doValidate($values)
     {
+    }
+
+    /**
+     * Create identity object.
+     *
+     * @return \NTLAB\Lib\Identity\Identity
+     */
+    public function createIdentity($id)
+    {
+        if (null === $this->identityClass) {
+            throw new \RuntimeException(sprintf('Validator %s identity class not set!', get_class($this)));
+        }
+        $class = $this->identityClass;
+        return new $class($id);
     }
 
     /**
@@ -194,7 +213,7 @@ abstract class Validator
      *
      * @param mixed $value1
      * @param mixed $value2
-     * @return boolean
+     * @return bool
      */
     protected function cmpVal($value1, $value2)
     {
@@ -215,14 +234,12 @@ abstract class Validator
      *
      * @param \stdClass $id1
      * @param \stdClass $id2
-     * @return boolean
+     * @return bool
      */
     public function cmpId(\stdClass $id1, \stdClass $id2)
     {
         $values1 = get_object_vars($id1);
         $values2 = get_object_vars($id2);
-        error_log(var_export($values1, true));
-        error_log(var_export($values2, true));
         if (count(array_diff_key($values1, $values2))) {
             return false;
         }

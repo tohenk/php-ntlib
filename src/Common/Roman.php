@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -50,7 +50,7 @@ class Roman
      * Check if input is a valid roman characters.
      *
      * @param string $chars
-     * @return boolean
+     * @return bool
      */
     protected static function isValid($chars)
     {

@@ -11,6 +11,7 @@ class NipTest extends BaseTest
     public function testNip()
     {
         $nip = new Nip('199909272020011004');
+        $this->assertTrue($nip->isLenValid(), 'Length of NIP is 18');
         $date = new \DateTime();
         $date->setTimestamp(mktime(0, 0, 0, 9, 27, 1999));
         $this->assertEquals($date, $nip->getTglLahir(), 'Properly decode date of birth');
@@ -19,6 +20,14 @@ class NipTest extends BaseTest
         $this->assertEquals(1, $nip->getGender(), 'Properly decode gender');
         $this->assertEquals(4, $nip->getUrut(), 'Properly decode urut');
         $this->assertEquals('19990927 202001 1 004', $nip->formatRaw(' '), 'Properly format');
+    }
+
+    public function testNipInvalid()
+    {
+        $nip = new Nip('19990927202001104');
+        $this->assertFalse($nip->isLenValid(), 'Length of NIP must be 18');
+        $nip = new Nip('1999092720200110004');
+        $this->assertFalse($nip->isLenValid(), 'Length of NIP must be 18');
     }
 
     public function testValidator()

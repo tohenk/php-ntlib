@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2022 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -103,7 +103,7 @@ class SequenceDate extends Sequence
      * @param \DateTime $date
      * @param string $format
      * @throws \Exception
-     * @return boolean
+     * @return bool
      */
     protected function decodeDate($str, &$date, $format)
     {
@@ -118,7 +118,7 @@ class SequenceDate extends Sequence
                 $yr = (int) date('Y');
             if (null === $dy)
                 $dy = 1;
-            if (! checkdate($mo, $dy, $yr)) {
+            if (!checkdate($mo, $dy, $yr)) {
                 throw new \Exception(sprintf('Invalid date yr=%s, mo=%s, dy=%s!', $yr, $mo, $dy));
             }
             $date = new \DateTime();

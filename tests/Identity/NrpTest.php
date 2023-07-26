@@ -15,4 +15,12 @@ class NrpTest extends BaseTest
         $this->assertEquals(29, $nrp->getUrut(), 'Properly decode urut');
         $this->assertEquals('9511 0029', $nrp->formatRaw(' '), 'Properly format');
     }
+
+    public function testNrpInvalid()
+    {
+        $nrp = new Nrp('9511029');
+        $this->assertFalse($nrp->isLenValid(), 'Length of NRP must be 8');
+        $nrp = new Nrp('951100029');
+        $this->assertFalse($nrp->isLenValid(), 'Length of NRP must be 8');
+    }
 }
