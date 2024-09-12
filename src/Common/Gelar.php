@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2023 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2016-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,7 +28,7 @@ namespace NTLAB\Lib\Common;
 
 class Gelar
 {
-    protected static $gelars = ['Ir', 'Drs', 'Dra', 'Dr', 'Ec', 'dr', 'Hj', 'H'];
+    protected static $gelars = ['Ir', 'Drs', 'Dra', 'Dr', 'Ec', 'dr', 'drg', 'drh', 'Hj', 'H'];
 
     /**
      * Strip gelar depan.
