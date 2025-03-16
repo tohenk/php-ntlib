@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,19 +28,21 @@ namespace NTLAB\Lib\Identity\Ids;
 
 use NTLAB\Lib\Identity\Identity;
 use NTLAB\Lib\Identity\SequenceDate;
+use NTLAB\Lib\Identity\SequenceDateCapeg;
 use NTLAB\Lib\Identity\SequenceSerial;
 
 /**
  * NIP decode/encode utility.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Nip extends Identity
 {
-    const NIP_DOB = 'dob';
-    const NIP_CAPEG = 'capeg';
-    const NIP_GENDER = 'gender';
-    const NIP_SEQUENCE = 'seq';
+    public const NIP_DOB = 'dob';
+    public const NIP_CAPEG = 'capeg';
+    public const NIP_TYPE = 'type';
+    public const NIP_GENDER = 'gender';
+    public const NIP_SEQUENCE = 'seq';
 
     /**
      * Constructor.
@@ -51,7 +53,7 @@ class Nip extends Identity
     {
         $this
             ->addSeq(new SequenceDate(8, self::NIP_DOB))
-            ->addSeq(new SequenceDate(6, self::NIP_CAPEG, 'Ym'))
+            ->addSeq(new SequenceDateCapeg(6, [self::NIP_CAPEG, self::NIP_TYPE], 'Ym'))
             ->addSeq(new SequenceSerial(1, self::NIP_GENDER))
             ->addSeq(new SequenceSerial(3, self::NIP_SEQUENCE))
             ->decode($nip);
@@ -75,6 +77,16 @@ class Nip extends Identity
     public function getTmtCapeg()
     {
         return $this->getValue(self::NIP_CAPEG);
+    }
+
+    /**
+     * Get type (PNS or PPPK).
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->getValue(self::NIP_TYPE);
     }
 
     /**

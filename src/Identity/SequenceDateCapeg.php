@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -27,13 +27,13 @@
 namespace NTLAB\Lib\Identity;
 
 /**
- * A date and gender sequence decoder/encoder used as part of NIK.
+ * A date and gender sequence decoder/encoder used as part of NIP.
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class SequenceDateNik extends SequenceDate
+class SequenceDateCapeg extends SequenceDate
 {
-    public const GENDER_DIVISOR = 40;
+    public const TYPE_DIVISOR = 20;
 
     /**
      * {@inheritDoc}
@@ -42,14 +42,14 @@ class SequenceDateNik extends SequenceDate
     protected function extractDate($str, $format, &$yr, &$mo, &$dy)
     {
         parent::extractDate($str, $format, $yr, $mo, $dy);
-        // detect gender and fix date
-        if ($dy - self::GENDER_DIVISOR > 0) {
-            $gender = Gender::FEMALE;
-            $dy -= self::GENDER_DIVISOR;
+        // detect type and fix date
+        if ($mo - self::TYPE_DIVISOR > 0) {
+            $type = Employee::PPPK;
+            $mo -= self::TYPE_DIVISOR;
         } else {
-            $gender = Gender::MALE;
+            $type = Employee::PNS;
         }
-        $this->setValue($gender, $this->keys[1]);
+        $this->setValue($type, $this->keys[1]);
     }
 
     /**
@@ -62,8 +62,8 @@ class SequenceDateNik extends SequenceDate
             $dates = [];
             for ($i = 0; $i < strlen($this->format); $i ++) {
                 $v = $date->format(substr($this->format, $i, 1));
-                if ('d' === substr($this->format, $i, 1) && Gender::FEMALE === $this->getValue($this->keys[1])) {
-                    $v = (string) ((int) $v + self::GENDER_DIVISOR);
+                if ('m' === substr($this->format, $i, 1) && Employee::PPPK === $this->getValue($this->keys[1])) {
+                    $v = (string) ((int) $v + self::TYPE_DIVISOR);
                 }
                 $dates[] = $v;
             }

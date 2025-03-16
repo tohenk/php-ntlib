@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,13 +24,14 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\Lib\Test;
+namespace NTLAB\Lib\Test\Identity;
 
+use PHPUnit\Framework\TestCase;
 use NTLAB\Lib\Identity\Ids\Nik;
 use NTLAB\Lib\Identity\Validator\Nik as NikValidator;
 use NTLAB\Lib\Identity\Provider\Provider;
 
-class NikTest extends BaseTest
+class NikTest extends TestCase
 {
     public function testNik()
     {

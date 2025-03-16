@@ -81,6 +81,7 @@ use NTLAB\Lib\Identity\Ids\Nip;
 $nip = new Nip('199909272020011004');
 echo $nip->getTglLahir()->format('d-m-Y'); // 27-09-1999
 echo $nip->getTmtCapeg()->format('d-m-Y'); // 01-01-2020
+echo $nip->getType(); // 1
 echo $nip->getGender(); // 1
 echo $nip->getUrut(); // 4
 ```

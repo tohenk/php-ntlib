@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,39 +24,15 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\Lib\Test;
+namespace NTLAB\Lib\Identity;
 
-use PHPUnit\Framework\TestCase;
-
-abstract class BaseTest extends TestCase
+/**
+ * Represents identity gender.
+ *
+ * @author Toha <tohenk@yahoo.com>
+ */
+class Gender
 {
-    protected function getFixtureDir()
-    {
-        return __DIR__.'/fixtures/';
-    }
-
-    protected function getResultDir()
-    {
-        return __DIR__.'/result/';
-    }
-
-    protected function getOutDir()
-    {
-        return __DIR__.'/out/';
-    }
-
-    protected function loadFixture($name)
-    {
-        return file_get_contents($this->getFixtureDir().$name);
-    }
-
-    protected function loadResult($name)
-    {
-        return file_get_contents($this->getResultDir().$name);
-    }
-
-    protected function saveOut($content, $filename)
-    {
-        file_put_contents($this->getOutDir().$filename, $content);
-    }
+    public const MALE = 'L';
+    public const FEMALE = 'P';
 }

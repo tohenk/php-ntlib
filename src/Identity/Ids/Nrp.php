@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2022-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2022-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -33,12 +33,12 @@ use NTLAB\Lib\Identity\SequenceSerial;
 /**
  * NRP (Nomor Register Pokok) decode/encode utility.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Nrp extends Identity
 {
-    const NRP_LAHIR = 'lahir';
-    const NRP_SEQUENCE = 'seq';
+    public const NRP_LAHIR = 'lahir';
+    public const NRP_SEQUENCE = 'seq';
 
     /**
      * Constructor.

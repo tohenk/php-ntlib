@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,39 +24,15 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\Lib\Identity\Provider;
+namespace NTLAB\Lib\Identity;
 
 /**
- * An identity provider base class.
+ * Represents employee type.
  *
  * @author Toha <tohenk@yahoo.com>
  */
-abstract class Provider implements ProviderInterface
+class Employee
 {
-    /**
-     * @var string
-     */
-    protected $name = null;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->initialize();
-    }
-
-    protected function initialize()
-    {
-    }
-
-    /**
-     * Get provider name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+    public const PNS = 1;
+    public const PPPK = 2;
 }

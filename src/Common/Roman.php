@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,8 +28,8 @@ namespace NTLAB\Lib\Common;
 
 class Roman
 {
-    const BASE1_COUNT = 3;
-    const BASE2_COUNT = 1;
+    public const BASE1_COUNT = 3;
+    public const BASE2_COUNT = 1;
 
     protected static $values = [1, 5];
 

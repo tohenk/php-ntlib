@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,9 +28,9 @@ namespace NTLAB\Lib\Common;
 
 class Beautifier
 {
-    const IGNORE_NONE = 0;
-    const IGNORE_ROMAN = 1;
-    const IGNORE_INLIST = 2;
+    public const IGNORE_NONE = 0;
+    public const IGNORE_ROMAN = 1;
+    public const IGNORE_INLIST = 2;
 
     protected static $delimeters = ' /-()';
     protected static $ignores = [];

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,16 +28,16 @@ namespace NTLAB\Lib\Common;
 
 class Terbilang
 {
-    const TERBILANG_SEPARATOR = ' ';
-    const TERBILANG_SE = 'SE';
-    const TERBILANG_PULUH = 'PULUH';
-    const TERBILANG_BELAS = 'BELAS';
-    const TERBILANG_RATUS = 'RATUS'; 
+    public const TERBILANG_SEPARATOR = ' ';
+    public const TERBILANG_SE = 'SE';
+    public const TERBILANG_PULUH = 'PULUH';
+    public const TERBILANG_BELAS = 'BELAS';
+    public const TERBILANG_RATUS = 'RATUS'; 
 
-    const DECIMAL_SYMBOL = 1;
-    const DECIMAL_COMMA = 2;
-    const DECIMAL_PER = 3;
-    const DECIMAL_CUSTOM = 4;
+    public const DECIMAL_SYMBOL = 1;
+    public const DECIMAL_COMMA = 2;
+    public const DECIMAL_PER = 3;
+    public const DECIMAL_CUSTOM = 4;
 
     protected $numbers = ['NOL', 'SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM', 'TUJUH', 'DELAPAN', 'SEMBILAN'];
     protected $hundreds = ['', self::TERBILANG_PULUH, self::TERBILANG_RATUS];

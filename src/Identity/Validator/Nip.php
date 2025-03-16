@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -31,13 +31,14 @@ use NTLAB\Lib\Identity\Ids\Nip as NipIdentity;
 /**
  * NIP identity validator.
  *
- * @author Toha
+ * @author Toha <tohenk@yahoo.com>
  */
 class Nip extends Validator
 {
     protected $keyId = 'id';
     protected $keyDob = 'dob';
     protected $keyGender = 'gender';
+    protected $keyType = 'type';
 
     /**
      *
@@ -57,6 +58,7 @@ class Nip extends Validator
         return $this->createComparable([
             $this->keyDob => $values[$this->keyDob],
             $this->keyGender => $values[$this->keyGender],
+            $this->keyType => $values[$this->keyType],
         ]);
     }
 
@@ -64,7 +66,7 @@ class Nip extends Validator
     {
         if (($provider = $this->getProvider()) && null !== ($info = $provider->query($id))) {
             $this->data = $info;
-            if (is_array($info) && ($comparable2 = $this->createComparableUsingKeys([$this->keyDob, $this->keyGender], $info))) {
+            if (is_array($info) && ($comparable2 = $this->createComparableUsingKeys([$this->keyDob, $this->keyGender, $this->keyType], $info))) {
                 return $this->cmpId($comparable, $comparable2);
             }
             return false;
@@ -83,6 +85,7 @@ class Nip extends Validator
         $comparable2 = $this->getIdComparable([
             $this->keyDob => $nip->getTglLahir(),
             $this->keyGender => $nip->getGender(),
+            $this->keyType => $nip->getType(),
         ]);
         return $this->cmpId($comparable, $comparable2);
     }
@@ -93,7 +96,7 @@ class Nip extends Validator
      */
     protected function doValidate($values)
     {
-        if (isset($values[$this->keyId]) && isset($values[$this->keyDob]) && isset($values[$this->keyGender])) {
+        if (isset($values[$this->keyId]) && isset($values[$this->keyDob]) && isset($values[$this->keyGender]) && isset($values[$this->keyType])) {
             $id = $values[$this->keyId];
             $comparable = $this->getIdComparable($values);
             // validate using nip provider if applicable
