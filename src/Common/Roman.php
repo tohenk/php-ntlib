@@ -26,14 +26,57 @@
 
 namespace NTLAB\Lib\Common;
 
+/**
+ * Roman number to text and vice versa.
+ *
+ * @author Toha <tohenk@yahoo.com>
+ */
 class Roman
 {
     public const BASE1_COUNT = 3;
     public const BASE2_COUNT = 1;
 
-    protected static $values = [1, 5];
+    protected $values = [1, 5];
+    protected $chars = 'IVXLCDM';
 
-    protected static $chars = 'IVXLCDM';
+    /**
+     * Get instance.
+     *
+     * @return \NTLAB\Lib\Common\Roman
+     */
+    public static function getInstance()
+    {
+        static $instance = null;
+        if (null === $instance) {
+            $instance = new self();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Convert roman value into integer.
+     *
+     * @param string $s  Roman value
+     * @return int
+     */
+    public static function asInteger($s)
+    {
+        return static::getInstance()
+            ->toInteger($s);
+    }
+
+    /**
+     * Convert integer to roman characters.
+     *
+     * @param int $value  Integer value
+     * @return string Roman characters.
+     */
+    public static function asRoman($value)
+    {
+        return static::getInstance()
+            ->toRoman($value);
+    }
 
     /**
      * Get the index of roman char.
@@ -41,9 +84,9 @@ class Roman
      * @param string $char
      * @return int index of char, starting from 0, false if no match
      */
-    protected static function getCharIndex($char)
+    protected function getCharIndex($char)
     {
-        return strpos(static::$chars, $char);
+        return strpos($this->chars, $char);
     }
 
     /**
@@ -52,7 +95,7 @@ class Roman
      * @param string $chars
      * @return bool
      */
-    protected static function isValid($chars)
+    protected function isValid($chars)
     {
         $matchCount = 1;
         $lastIndex = null;
@@ -68,7 +111,7 @@ class Roman
             } else {
                 $matchCount++;
             }
-            $index = static::getCharIndex($char);
+            $index = $this->getCharIndex($char);
             if ($index === false) {
                 return false;
             } else {
@@ -123,6 +166,7 @@ class Roman
                 $lastMatch = $matchCount;
             }
         }
+
         return true;
     }
 
@@ -132,11 +176,12 @@ class Roman
      * @param string $char
      * @return int
      */
-    protected static function getValue($char)
+    protected function getValue($char)
     {
-        $index = static::getCharIndex($char);
-        $base = static::$values[$index % 2];
+        $index = $this->getCharIndex($char);
+        $base = $this->values[$index % 2];
         $digit = (int) ($index / 2);
+
         return (int) $base * ('1e+' . $digit);
     }
 
@@ -145,9 +190,9 @@ class Roman
      *
      * @return int
      */
-    protected static function getMaxDigit()
+    protected function getMaxDigit()
     {
-        return ceil(strlen(static::$chars) / 2);
+        return ceil(strlen($this->chars) / 2);
     }
 
     /**
@@ -156,10 +201,10 @@ class Roman
      * @param string $s  Roman value
      * @return int
      */
-    public static function asInteger($s)
+    public function toInteger($s)
     {
         $s = strtoupper($s);
-        if ($s == '' || static::isValid($s) == false) {
+        if ($s == '' || $this->isValid($s) == false) {
             return;
         }
 
@@ -167,10 +212,10 @@ class Roman
         $result = 0;
         $len = strlen($s);
         while (true) {
-            $value = static::getValue($s[$i]);
-            if ($i + 1 < $len && static::getCharIndex($s[$i]) < static::getCharIndex($s[$i + 1])) {
+            $value = $this->getValue($s[$i]);
+            if ($i + 1 < $len && $this->getCharIndex($s[$i]) < $this->getCharIndex($s[$i + 1])) {
                 $i++;
-                $value = static::getValue($s[$i]) - $value;
+                $value = $this->getValue($s[$i]) - $value;
             }
             $result += $value;
             $i++;
@@ -178,6 +223,7 @@ class Roman
                 break;
             }
         }
+
         return (int) $result;
     }
 
@@ -185,15 +231,15 @@ class Roman
      * Convert integer to roman characters.
      *
      * @param int $value  Integer value
-     * @return string roman characters.
+     * @return string Roman characters.
      */
-    public static function asRoman($value)
+    public function toRoman($value)
     {
         $result = null;
         if ($value > 0) {
             $s = strval($value);
             $digit = strlen($s);
-            if ($digit > self::getMaxDigit()) {
+            if ($digit > $this->getMaxDigit()) {
                 return;
             }
             for ($i = 0; $i < $digit; $i++) {
@@ -205,30 +251,31 @@ class Roman
                     case 1:
                     case 2:
                     case 3:
-                        $result .= str_repeat(static::$chars[$index], $val);
+                        $result .= str_repeat($this->chars[$index], $val);
                         break;
                     case 4:
                         // value is too high, e.g. >= 4000
-                        if ($index + 1 >= strlen(static::$chars)) {
+                        if ($index + 1 >= strlen($this->chars)) {
                             return;
                         }
-                        $result .= substr(static::$chars, $index, 2);
+                        $result .= substr($this->chars, $index, 2);
                         break;
                     case 5:
                     case 6:
                     case 7:
                     case 8:
-                        $result .= static::$chars[$index + 1];
+                        $result .= $this->chars[$index + 1];
                         if ($val > 5) {
-                            $result .= str_repeat(static::$chars[$index], $val - 5);
+                            $result .= str_repeat($this->chars[$index], $val - 5);
                         }
                         break;
                     case 9:
-                        $result .= static::$chars[$index] . static::$chars[$index + 2];
+                        $result .= $this->chars[$index] . $this->chars[$index + 2];
                         break;
                 }
             }
         }
+
         return $result;
     }
 }

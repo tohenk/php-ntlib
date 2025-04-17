@@ -26,13 +26,18 @@
 
 namespace NTLAB\Lib\Common;
 
+/**
+ * Convert number to Indonesian text.
+ *
+ * @author Toha <tohenk@yahoo.com>
+ */
 class Terbilang
 {
-    public const TERBILANG_SEPARATOR = ' ';
-    public const TERBILANG_SE = 'SE';
-    public const TERBILANG_PULUH = 'PULUH';
-    public const TERBILANG_BELAS = 'BELAS';
-    public const TERBILANG_RATUS = 'RATUS'; 
+    public const SEPARATOR = ' ';
+    public const SE = 'SE';
+    public const PULUH = 'PULUH';
+    public const BELAS = 'BELAS';
+    public const RATUS = 'RATUS'; 
 
     public const DECIMAL_SYMBOL = 1;
     public const DECIMAL_COMMA = 2;
@@ -40,14 +45,9 @@ class Terbilang
     public const DECIMAL_CUSTOM = 4;
 
     protected $numbers = ['NOL', 'SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM', 'TUJUH', 'DELAPAN', 'SEMBILAN'];
-    protected $hundreds = ['', self::TERBILANG_PULUH, self::TERBILANG_RATUS];
+    protected $hundreds = ['', self::PULUH, self::RATUS];
     protected $thousands = ['', 'RIBU', 'JUTA', 'MILYAR', 'TRILYUN', 'BILYUN'];
     protected $decimal = null;
-
-    /**
-     * @var \NTLAB\Lib\Common\Terbilang
-     */
-    protected static $instance = null;
 
     /**
      * Get instance.
@@ -56,10 +56,26 @@ class Terbilang
      */
     public static function getInstance()
     {
-        if (null === static::$instance) {
-            static::$instance = new self();
+        static $instance = null;
+        if (null === $instance) {
+            $instance = new self();
         }
-        return static::$instance;
+
+        return $instance;
+    }
+
+    /**
+     * Convert number to Indonesian text.
+     *
+     * @param mixed $value  The value to convert
+     * @param bool $decimal  True to include decimal part
+     * @param int $type  The decimal type
+     * @return string
+     */
+    public static function from($value, $decimal = true, $type = self::DECIMAL_COMMA)
+    {
+        return static::getInstance()
+            ->convert($value, $decimal, $type);
     }
 
     /**
@@ -88,11 +104,12 @@ class Terbilang
                 break;
             }
             if (null !== $result) {
-                $result .= static::TERBILANG_SEPARATOR;
+                $result .= static::SEPARATOR;
             }
             $result .= $this->numbers[0];
             $str = substr($str, 1, strlen($str) - 1);
         }
+
         return $result;
     }
 
@@ -106,11 +123,12 @@ class Terbilang
     protected function concatSatuan($str, $satuan)
     {
         if ($str) {
-            if ($str != static::TERBILANG_SE) {
-                $str .= static::TERBILANG_SEPARATOR;
+            if ($str != static::SE) {
+                $str .= static::SEPARATOR;
             }
             $str .= $satuan;
         }
+
         return $str;
     }
 
@@ -123,7 +141,7 @@ class Terbilang
     protected function terbilang3($str)
     {
         $result = null;
-        $this->hundreds[1] = static::TERBILANG_PULUH;
+        $this->hundreds[1] = static::PULUH;
         $this->trimZero($str);
         if (strlen($str)) {
             $len = strlen($str);
@@ -138,15 +156,15 @@ class Terbilang
                 $s = $angka > 0 ? $this->numbers[$angka] : null;
                 // substitute 1 with 'SE' only when needed
                 if ($i > 0 && $angka == 1) {
-                    $s = static::TERBILANG_SE;
+                    $s = static::SE;
                 }
                 // check special number based on digit
                 if ($i == 0 && $len > 1 && $this->digitIndex($str, $p - 1) == 1) {
                     if ($angka <= 1) {
-                        $s = static::TERBILANG_SE;
+                        $s = static::SE;
                     }
                     if ($angka > 0) {
-                        $this->hundreds[1] = static::TERBILANG_BELAS;
+                        $this->hundreds[1] = static::BELAS;
                     }
                     $i++;
                     $p--;
@@ -154,10 +172,11 @@ class Terbilang
                 // Combine with satuan
                 $s = $this->concatSatuan($s, $this->hundreds[$i]);
                 // Combine with previous result
-                $result = trim($s . static::TERBILANG_SEPARATOR . $result);
+                $result = trim($s . static::SEPARATOR . $result);
                 $i++;
             }
         }
+
         return trim($result);
     }
 
@@ -182,14 +201,15 @@ class Terbilang
             $str = substr($str, 0, strlen($str) - 3);
             // convert SATU RIBU to SERIBU
             if ($i == 1 && $s == $this->numbers[1]) {
-                $s = static::TERBILANG_SE;
+                $s = static::SE;
             }
             $s = $this->concatSatuan($s, $this->thousands[$i]);
-            $result = trim($s.static::TERBILANG_SEPARATOR.$result);
+            $result = trim($s.static::SEPARATOR.$result);
         }
         if ($leading_zero && $zero) {
-            $result = trim($zero.static::TERBILANG_SEPARATOR.$result);
+            $result = trim($zero.static::SEPARATOR.$result);
         }
+
         return $result;
     }
 
@@ -222,11 +242,12 @@ class Terbilang
     public function setCustomDecimal($value)
     {
         $this->decimal = $value;
+
         return $this;
     }
 
     /**
-     * Convert number as terbilang.
+     * Convert number to Indonesian text.
      *
      * @param mixed $value  The value to convert
      * @param bool $decimal  True to include decimal part
@@ -255,7 +276,7 @@ class Terbilang
                     }
                     break;
                 case static::DECIMAL_PER:
-                    $result .= static::TERBILANG_SEPARATOR.$this->terbilang((string) (int) $frac, false);
+                    $result .= static::SEPARATOR.$this->terbilang((string) (int) $frac, false);
                     $result .= ' PER '.$this->terbilang('1'.str_repeat('0', strlen($frac)), false);
                     break;
                 case static::DECIMAL_CUSTOM:
@@ -265,6 +286,7 @@ class Terbilang
                     break;
             }
         }
+
         return $result;
     }
 }

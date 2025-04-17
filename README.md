@@ -29,19 +29,19 @@ echo Roman::asRoman(51); // LI
 
 ### Terbilang
 
-Number to text for Indonesian.
+Convert number to Indonesian text.
 
 ```php
 <?php
 
 use NTLAB\Lib\Common\Terbilang;
 
-echo Terbilang::getInstance()->convert(1001); // SERIBU SATU
+echo Terbilang::from(1001); // SERIBU SATU
 ```
 
 ### Gelar
 
-An Indonesian title stripper.
+A title stripper.
 
 ```php
 <?php

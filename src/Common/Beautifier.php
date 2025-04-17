@@ -26,14 +26,48 @@
 
 namespace NTLAB\Lib\Common;
 
+/**
+ * String beautifier which can ignores list or roman number.
+ *
+ * @author Toha <tohenk@yahoo.com>
+ */
 class Beautifier
 {
     public const IGNORE_NONE = 0;
     public const IGNORE_ROMAN = 1;
     public const IGNORE_INLIST = 2;
 
-    protected static $delimeters = ' /-()';
-    protected static $ignores = [];
+    protected $flags = self::IGNORE_NONE;
+    protected $delimeters = ' /-()';
+    protected $ignores = [];
+
+    /**
+     * Get instance.
+     *
+     * @return \NTLAB\Lib\Common\Beautifier
+     */
+    public static function getInstance()
+    {
+        static $instance = null;
+        if (null === $instance) {
+            $instance = new self();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Do the beauty.
+     *
+     * @param string $str  The text to beautify
+     * @param int $flags  Ignores flag
+     * @return string
+     */
+    public static function beautify($str, $flags = null)
+    {
+        return static::getInstance()
+            ->doBeautify($str, $flags);
+    }
 
     /**
      * Load ignored texts.
@@ -41,12 +75,14 @@ class Beautifier
      * @param string $filename  Filename
      * @return bool true if loaded
      */
-    public static function loadIgnores($filename)
+    public function loadIgnores($filename)
     {
         if (is_readable($filename)) {
-            self::addIgnore(file($filename));
+            $this->addIgnore(file($filename));
+
             return true;
         }
+
         return false;
     }
 
@@ -54,21 +90,36 @@ class Beautifier
      * Add ignored text which the case is stay unchanged.
      *
      * @param array $array  The ignored text
+     * @return \NTLAB\Lib\Common\Beautifier
      */
-    public static function addIgnore($array = [])
+    public function addIgnore($array = [])
     {
-        if (null === $array || false === $array) {
-            return;
-        }
-        if (!is_array($array)) {
-            $array = [$array];
-        }
-        foreach ($array as $a) {
-            $a = trim($a);
-            if (!in_array($a, static::$ignores)) {
-                static::$ignores[] = $a;
+        if (null !== $array && false !== $array) {
+            if (!is_array($array)) {
+                $array = [$array];
+            }
+            foreach ($array as $a) {
+                $a = trim($a);
+                if (!in_array($a, $this->ignores)) {
+                    $this->ignores[] = $a;
+                }
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Set default ignores flag.
+     *
+     * @param int $flags Ignores flag
+     * @return \NTLAB\Lib\Common\Beautifier
+     */
+    public function setFlags($flags)
+    {
+        $this->flags = $flags;
+
+        return $this;
     }
 
     /**
@@ -77,10 +128,10 @@ class Beautifier
      * @param string $str  The text
      * @return string
      */
-    protected static function getIgnored($str)
+    protected function getIgnored($str)
     {
-        foreach (static::$ignores as $ignored) {
-            if (strtolower($str) == strtolower($ignored)) {
+        foreach ($this->ignores as $ignored) {
+            if (strtolower($str) === strtolower($ignored)) {
                 return $ignored;
             }
         }
@@ -92,11 +143,12 @@ class Beautifier
      * @param string $char
      * @return bool
      */
-    protected static function isDelimeter($char)
+    protected function isDelimeter($char)
     {
-        if (false !== strpos(static::$delimeters, $char)) {
+        if (false !== strpos($this->delimeters, $char)) {
             return true;
         }
+
         return false;
     }
 
@@ -106,65 +158,71 @@ class Beautifier
      * @param string $str
      * @return string
      */
-    protected static function extract($str)
+    public function extract($str)
     {
         $i = 0;
         $pos = null;
         while (true) {
-            if (self::isDelimeter($str[$i])) {
+            if ($this->isDelimeter($str[$i])) {
                 $pos = $i;
-                if ($pos > 0 || $i == strlen($str) - 1) {
+                if ($pos > 0 || $i === strlen($str) - 1) {
                     break;
                 }
             } else {
-                if ($i == strlen($str) - 1) {
+                if ($i === strlen($str) - 1) {
                     break;
                 }
             }
             $i++;
         }
-        if ($pos == null) {
+        if ($pos === null) {
             $pos = strlen($str);
         }
+
         return substr($str, 0, $pos);
     }
 
     /**
-     * Do internal beauty process.
+     * Beautify a word.
      *
      * @param string $str  The text to beautify
-     * @param int $flag  Beautify flag
+     * @param int $flags  Ignores flag
      * @return string
      */
-    protected static function beautifyStr($str, $flag)
+    public function beautifyWord($str, $flags = null)
     {
+        if (null === $flags) {
+            $flags = $this->flags;
+        }
         // exclude from beauty if roman chars is detected
-        if (($flag & static::IGNORE_ROMAN) === static::IGNORE_ROMAN && is_int(Roman::asInteger($str))) {
+        if (($flags & static::IGNORE_ROMAN) === static::IGNORE_ROMAN && is_int(Roman::asInteger($str))) {
             return $str;
         }
         // exclude from beauty if found in exception list
-        if (($flag & static::IGNORE_INLIST) === static::IGNORE_INLIST) {
-            if (null !== ($ignored = self::getIgnored($str))) {
+        if (($flags & static::IGNORE_INLIST) === static::IGNORE_INLIST) {
+            if (null !== ($ignored = $this->getIgnored($str))) {
                 return $ignored;
             }
         }
         $s = strtolower($str);
         for ($i = 0; $i < strlen($s); $i++) {
-            if (!self::isDelimeter($s[$i])) {
+            if (!$this->isDelimeter($s[$i])) {
                 $s[$i] = strtoupper($s[$i]);
                 break;
             }
         }
+
         return $s;
     }
 
     /**
-     * Do the beauty.
+     * Do beautify.
      *
-     * @param string $str
+     * @param string $str  The text to beautify
+     * @param int $flags  Ignores flag
      * @return string
      */
-    public static function beautify($str, $flag = self::IGNORE_NONE)
+    public function doBeautify($str, $flags = null)
     {
         $result = null;
         $str = (string) $str;
@@ -172,17 +230,17 @@ class Beautifier
             if (0 === strlen(trim($str))) {
                 break;
             }
-            $bs = self::extract($str);
-            $beauty = self::beautifyStr($bs, $flag);
-            $pos = strpos($str, $bs) + strlen($bs) + 1;
+            $word = $this->extract($str);
+            $beautified = $this->beautifyWord($word, $flags);
+            $pos = strpos($str, $word) + strlen($word) + 1;
             $matched = false;
             if ($pos >= strlen($str)) {
                 $pos = strlen($str);
                 $matched = true;
             }
             $tmp = substr($str, 0, $pos);
-            if ($bs != $beauty) {
-                $tmp = str_replace($bs, $beauty, $tmp);
+            if ($word != $beautified) {
+                $tmp = str_replace($word, $beautified, $tmp);
             }
             $result .= $tmp;
             if (!$matched) {
@@ -191,6 +249,7 @@ class Beautifier
                 break;
             }
         }
+
         return $result;
     }
 }

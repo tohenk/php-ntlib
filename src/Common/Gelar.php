@@ -26,71 +26,102 @@
 
 namespace NTLAB\Lib\Common;
 
+/**
+ * Title stripper.
+ *
+ * @author Toha <tohenk@yahoo.com>
+ */
 class Gelar
 {
-    protected static $gelars = ['Ir', 'Drs', 'Dra', 'Dr', 'Ec', 'dr', 'drg', 'drh', 'Hj', 'H'];
+    protected $titles = ['Ir', 'Drs', 'Dra', 'Dr', 'Ec', 'dr', 'drg', 'drh', 'Hj', 'H'];
 
     /**
-     * Strip gelar depan.
+     * Get instance.
      *
-     * @param string $nama  Nama dengan gelar
+     * @return \NTLAB\Lib\Common\Gelar
+     */
+    public static function getInstance()
+    {
+        static $instance = null;
+        if (null === $instance) {
+            $instance = new self();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Strip both prefix and suffix titles.
+     *
+     * @param string $name  Name with titles
      * @return string
      */
-    protected static function stripDepan($nama)
+    public static function strip($name)
+    {
+        return static::getInstance()
+            ->doStrip($name);
+    }
+
+    /**
+     * Add prefix title to strip.
+     *
+     * @param string $title  Prefix title
+     * @return \NTLAB\Lib\Common\Gelar
+     */
+    public function add($title)
+    {
+        if (!in_array($title, $this->titles)) {
+            $this->titles[] = $title;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Strip prefix title.
+     *
+     * @param string $name  Name with titles
+     * @return string
+     */
+    protected function stripPrefix($name)
     {
       while (true) {
-          if (false === ($p = strpos($nama, '.'))) {
+          if (false === ($p = strpos($name, '.'))) {
               break;
           }
-          $gelar = substr($nama, 0, $p);
-          if (!in_array($gelar, self::$gelars)) {
+          $title = substr($name, 0, $p);
+          if (!in_array($title, $this->titles)) {
               break;
           }
-          $nama = trim(substr($nama, $p + 1));
+          $name = trim(substr($name, $p + 1));
       }
 
-      return $nama;
+      return $name;
     }
 
     /**
-     * Strip gelar belakang.
+     * Strip suffix title.
      *
-     * @param string $nama  Nama dengan gelar
+     * @param string $name  Name with titles
      * @return string
      */
-    protected static function stripBelakang($nama)
+    protected function stripSuffix($name)
     {
-        if (false != ($p = strpos($nama, ','))) {
-            $nama = trim(substr($nama, 0, $p));
+        if (false != ($p = strpos($name, ','))) {
+            $name = trim(substr($name, 0, $p));
         }
 
-        return $nama;
+        return $name;
     }
 
     /**
-     * Strip gelar depan dan belakang.
+     * Strip both prefix and suffix titles.
      *
-     * @param string $nama  Nama dengan gelar
+     * @param string $name  Name with titles
      * @return string
      */
-    public static function strip($nama)
+    public function doStrip($name)
     {
-        $nama = trim($nama);
-        $nama = self::stripDepan($nama);
-        $nama = self::stripBelakang($nama);
-
-        return $nama;
-    }
-
-    /**
-     * Add gelar depan to strip.
-     *
-     * @param string $gelar  Gelar depan
-     */
-    public static function add($gelar)
-    {
-        if (!in_array($gelar, self::$gelars)) {
-            self::$gelars[] = $gelar;
-        }
+        return $this->stripSuffix($this->stripPrefix(trim($name)));
     }
 }
