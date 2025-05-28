@@ -26,6 +26,7 @@
 
 namespace NTLAB\Lib\Identity\Ids;
 
+use NTLAB\Lib\Identity\Genderable;
 use NTLAB\Lib\Identity\Identity;
 use NTLAB\Lib\Identity\SequenceDate;
 use NTLAB\Lib\Identity\SequenceDateCapeg;
@@ -36,7 +37,7 @@ use NTLAB\Lib\Identity\SequenceSerial;
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class Nip extends Identity
+class Nip extends Identity implements Genderable
 {
     public const NIP_DOB = 'dob';
     public const NIP_CAPEG = 'capeg';

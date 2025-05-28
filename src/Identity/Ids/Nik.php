@@ -26,6 +26,7 @@
 
 namespace NTLAB\Lib\Identity\Ids;
 
+use NTLAB\Lib\Identity\Genderable;
 use NTLAB\Lib\Identity\Identity;
 use NTLAB\Lib\Identity\Sequence;
 use NTLAB\Lib\Identity\SequenceDateNik;
@@ -36,7 +37,7 @@ use NTLAB\Lib\Identity\SequenceSerial;
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class Nik extends Identity
+class Nik extends Identity implements Genderable
 {
     public const NIK_WILAYAH = 'wilayah';
     public const NIK_DOB = 'dob';
