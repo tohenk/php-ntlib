@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -34,21 +34,33 @@ namespace NTLAB\Lib\Identity;
  */
 abstract class Identity
 {
+    public const ID = '';
+
     /**
      * @var string
      */
     protected $raw;
 
     /**
-     * @var Sequence[]
+     * @var \NTLAB\Lib\Identity\Sequence[]
      */
     protected $sequences = [];
 
     /**
+     * Get identity name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return static::ID;
+    }
+
+    /**
      * Add id sequence processor.
      *
-     * @param Sequence $seq
-     * @return Identity
+     * @param \NTLAB\Lib\Identity\Sequence $seq
+     * @return \NTLAB\Lib\Identity\Identity
      */
     protected function addSeq($seq)
     {
@@ -122,7 +134,7 @@ abstract class Identity
     /**
      * Get decoded value.
      *
-     * @param string $name
+     * @param string $key
      * @return mixed
      */
     public function getValue($key)
@@ -139,7 +151,7 @@ abstract class Identity
      *
      * @param string $key
      * @param mixed $value
-     * @return Identity
+     * @return \NTLAB\Lib\Identity\Identity
      */
     public function setValue($key, $value)
     {

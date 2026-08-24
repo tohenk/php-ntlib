@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -125,7 +125,7 @@ class Sequence
      *
      * @param mixed $value
      * @param string $key
-     * @return Sequence
+     * @return \NTLAB\Lib\Identity\Sequence
      */
     public function setValue($value, $key = null)
     {
@@ -140,7 +140,7 @@ class Sequence
      * Decode raw value.
      *
      * @param string $raw
-     * @return Sequence
+     * @return \NTLAB\Lib\Identity\Sequence
      */
     public function decode($raw)
     {
@@ -163,7 +163,7 @@ class Sequence
     /**
      * Encode values.
      *
-     * @return Sequence
+     * @return \NTLAB\Lib\Identity\Sequence
      */
     public function encode()
     {
@@ -182,7 +182,7 @@ class Sequence
     /**
      * Reset values.
      *
-     * @return Sequence
+     * @return \NTLAB\Lib\Identity\Sequence
      */
     public function reset()
     {

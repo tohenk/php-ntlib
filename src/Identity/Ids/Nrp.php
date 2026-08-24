@@ -37,6 +37,8 @@ use NTLAB\Lib\Identity\SequenceSerial;
  */
 class Nrp extends Identity
 {
+    public const ID = 'NRP';
+
     public const NRP_LAHIR = 'lahir';
     public const NRP_SEQUENCE = 'seq';
 

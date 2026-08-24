@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -37,6 +37,11 @@ class SequenceDate extends Sequence
      * @var string
      */
     protected $format;
+
+    /**
+     * @var ?string
+     */
+    protected $error;
 
     /**
      * Constructor.
@@ -107,6 +112,7 @@ class SequenceDate extends Sequence
      */
     protected function decodeDate($str, &$date, $format)
     {
+        $this->error = null;
         $retval = true;
         try {
             $yr = null;
@@ -114,10 +120,15 @@ class SequenceDate extends Sequence
             $dy = null;
             $this->extractDate($str, $format, $yr, $mo, $dy);
             // @TODO: default values
-            if (null === $yr)
+            if (null === $yr) {
                 $yr = (int) date('Y');
-            if (null === $dy)
+            }
+            if (null === $dy) {
                 $dy = 1;
+            }
+            if (null === $mo) {
+                throw new \Exception('Unable to decode date without month!');
+            }
             if (!checkdate($mo, $dy, $yr)) {
                 throw new \Exception(sprintf('Invalid date yr=%s, mo=%s, dy=%s!', $yr, $mo, $dy));
             }
@@ -125,7 +136,7 @@ class SequenceDate extends Sequence
             $date->setTimestamp(mktime(0, 0, 0, $mo, $dy, $yr));
         } catch (\Exception $e) {
             $retval = false;
-            error_log($e->getMessage());
+            $this->error = $e;
         }
         return $retval;
     }

@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -39,6 +39,8 @@ use NTLAB\Lib\Identity\SequenceSerial;
  */
 class Nip extends Identity implements Genderable
 {
+    public const ID = 'NIP';
+
     public const NIP_DOB = 'dob';
     public const NIP_CAPEG = 'capeg';
     public const NIP_TYPE = 'type';

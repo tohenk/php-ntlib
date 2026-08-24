@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -34,6 +34,7 @@ class NrpTest extends TestCase
     public function testNrp()
     {
         $nrp = new Nrp('95110029');
+        $this->assertEquals('NRP', $nrp->getName(), 'Identity name is matched');
         $date = new \DateTime();
         $date->setTimestamp(mktime(0, 0, 0, 11, 1, 1995));
         $this->assertEquals($date, $nrp->getLahir(), 'Properly decode date of birth');

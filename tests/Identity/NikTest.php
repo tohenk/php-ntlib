@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -36,6 +36,7 @@ class NikTest extends TestCase
     public function testNik()
     {
         $nik = new Nik('3515155202000005');
+        $this->assertEquals('NIK', $nik->getName(), 'Identity name is matched');
         $date = new \DateTime();
         $date->setTimestamp(mktime(0, 0, 0, 2, 12, 2000));
         $this->assertTrue($nik->isLenValid(), 'Length of NIK is 16');

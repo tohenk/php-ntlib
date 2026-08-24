@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2021-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -39,6 +39,8 @@ use NTLAB\Lib\Identity\SequenceSerial;
  */
 class Nik extends Identity implements Genderable
 {
+    public const ID = 'NIK';
+
     public const NIK_WILAYAH = 'wilayah';
     public const NIK_DOB = 'dob';
     public const NIK_GENDER = 'gender';

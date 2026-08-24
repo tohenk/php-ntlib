@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2014-2025 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2014-2026 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -36,6 +36,7 @@ class NipTest extends TestCase
     public function testNipPns()
     {
         $nip = new Nip('199909272020011004');
+        $this->assertEquals('NIP', $nip->getName(), 'Identity name is matched');
         $this->assertTrue($nip->isLenValid(), 'Length of NIP is 18');
         $date = new \DateTime();
         $date->setTimestamp(mktime(0, 0, 0, 9, 27, 1999));
