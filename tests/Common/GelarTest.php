@@ -31,11 +31,21 @@ use NTLAB\Lib\Common\Gelar;
 
 class GelarTest extends TestCase
 {
-    public function testGelar()
+    public function testStrip()
     {
-        $this->assertEquals('NAMANYA', Gelar::strip('Drs. NAMANYA'), 'Proper strip gelar depan');
-        $this->assertEquals('NAMANYA', Gelar::strip('NAMANYA, M.Sc'), 'Proper strip gelar belakang');
-        $this->assertEquals('NAMANYA', Gelar::strip('Drs. NAMANYA, M.Sc'), 'Proper strip gelar depan and gelar belakang');
-        $this->assertEquals('NAMANYA', Gelar::strip('Drs.  NAMANYA,  M.Sc'), 'Proper strip gelar depan and gelar belakang with extra spaces');
+        $this->assertEquals('NAMANYA', Gelar::strip('NAMANYA'), 'Proper strip name without title');
+        $this->assertEquals('NAMANYA', Gelar::strip('Drs. NAMANYA'), 'Proper strip name with title prefix');
+        $this->assertEquals('NAMANYA', Gelar::strip('NAMANYA, M.Sc'), 'Proper strip name with title suffix');
+        $this->assertEquals('NAMANYA', Gelar::strip('Drs. NAMANYA, M.Sc'), 'Proper strip name with title prefix and title suffix');
+        $this->assertEquals('NAMANYA', Gelar::strip('Drs.  NAMANYA,  M.Sc'), 'Proper strip name with title prefix and title suffix with extra spaces');
+    }
+
+    public function testSplit()
+    {
+        $this->assertEquals(['NAMANYA', null, null], Gelar::split('NAMANYA'), 'Proper split name without title');
+        $this->assertEquals(['NAMANYA', 'Drs.', null], Gelar::split('Drs. NAMANYA'), 'Proper split trip name with title prefix');
+        $this->assertEquals(['NAMANYA', null, 'M.Sc'], Gelar::split('NAMANYA, M.Sc'), 'Proper split name with title suffix');
+        $this->assertEquals(['NAMANYA', 'Drs.', 'M.Sc'], Gelar::split('Drs. NAMANYA, M.Sc'), 'Proper split name with title prefix and title suffix');
+        $this->assertEquals(['NAMANYA', 'Drs.', 'M.Sc'], Gelar::split('Drs.  NAMANYA,  M.Sc'), 'Proper split name with title prefix and title suffix with extra spaces');
     }
 }

@@ -44,9 +44,16 @@ class Terbilang
     public const DECIMAL_PER = 3;
     public const DECIMAL_CUSTOM = 4;
 
+    /** @var string[] */
     protected $numbers = ['NOL', 'SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA', 'ENAM', 'TUJUH', 'DELAPAN', 'SEMBILAN'];
+
+    /** @var string[] */
     protected $hundreds = ['', self::PULUH, self::RATUS];
+
+    /** @var string[] */
     protected $thousands = ['', 'RIBU', 'JUTA', 'MILYAR', 'TRILYUN', 'BILYUN'];
+
+    /** @var ?string */
     protected $decimal = null;
 
     /**

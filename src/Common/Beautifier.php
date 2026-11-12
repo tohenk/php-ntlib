@@ -37,8 +37,13 @@ class Beautifier
     public const IGNORE_ROMAN = 1;
     public const IGNORE_INLIST = 2;
 
+    /** @var int */
     protected $flags = self::IGNORE_NONE;
+
+    /** @var string */
     protected $delimeters = ' /-()';
+
+    /** @var string[] */
     protected $ignores = [];
 
     /**

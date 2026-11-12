@@ -36,7 +36,10 @@ class Roman
     public const BASE1_COUNT = 3;
     public const BASE2_COUNT = 1;
 
+    /** @var int[] */
     protected $values = [1, 5];
+
+    /** @var string */
     protected $chars = 'IVXLCDM';
 
     /**

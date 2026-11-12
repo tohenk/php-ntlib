@@ -33,6 +33,7 @@ namespace NTLAB\Lib\Common;
  */
 class Gelar
 {
+    /** @var string[] */
     protected $titles = ['Ir', 'Drs', 'Dra', 'Dr', 'Ec', 'dr', 'drg', 'drh', 'Hj', 'H'];
 
     /**
@@ -58,8 +59,22 @@ class Gelar
      */
     public static function strip($name)
     {
+        $titles = null;
+
         return static::getInstance()
-            ->doStrip($name);
+            ->doStrip($name, $titles);
+    }
+
+    /**
+     * Split titled name into name, prefix, and suffix.
+     *
+     * @param string $name  Name with titles
+     * @return array
+     */
+    public static function split($name)
+    {
+        return static::getInstance()
+            ->doSplit($name);
     }
 
     /**
@@ -81,33 +96,39 @@ class Gelar
      * Strip prefix title.
      *
      * @param string $name  Name with titles
+     * @param string $prefix  Stripped prefix
      * @return string
      */
-    protected function stripPrefix($name)
+    protected function stripPrefix($name, &$prefix)
     {
-      while (true) {
-          if (false === ($p = strpos($name, '.'))) {
-              break;
-          }
-          $title = substr($name, 0, $p);
-          if (!in_array($title, $this->titles)) {
-              break;
-          }
-          $name = trim(substr($name, $p + 1));
-      }
+        $prefix = null;
+        while (true) {
+            if (false === ($p = strpos($name, '.'))) {
+                break;
+            }
+            $title = substr($name, 0, $p);
+            if (!in_array($title, $this->titles)) {
+                break;
+            }
+            $prefix = trim(substr($name, 0, $p + 1));
+            $name = trim(substr($name, $p + 1));
+        }
 
-      return $name;
+        return $name;
     }
 
     /**
      * Strip suffix title.
      *
      * @param string $name  Name with titles
+     * @param string $suffix  Stripped suffix
      * @return string
      */
-    protected function stripSuffix($name)
+    protected function stripSuffix($name, &$suffix)
     {
+        $suffix = null;
         if (false != ($p = strpos($name, ','))) {
+            $suffix = trim(substr($name, $p + 1));
             $name = trim(substr($name, 0, $p));
         }
 
@@ -118,10 +139,27 @@ class Gelar
      * Strip both prefix and suffix titles.
      *
      * @param string $name  Name with titles
+     * @param array $titles  Stripped titles
      * @return string
      */
-    public function doStrip($name)
+    public function doStrip($name, &$titles)
     {
-        return $this->stripSuffix($this->stripPrefix(trim($name)));
+        $titles = [null, null];
+
+        return $this->stripSuffix($this->stripPrefix(trim($name), $titles[0]), $titles[1]);
+    }
+
+    /**
+     * Split titled name into name, prefix, and suffix.
+     *
+     * @param string $name  Name with titles
+     * @return array
+     */
+    public function doSplit($name)
+    {
+        $result = [null, null, null];
+        $result[0] = $this->stripSuffix($this->stripPrefix(trim($name), $result[1]), $result[2]);
+
+        return $result;
     }
 }
