@@ -36,6 +36,7 @@ class Beautifier
     public const IGNORE_NONE = 0;
     public const IGNORE_ROMAN = 1;
     public const IGNORE_INLIST = 2;
+    public const IGNORE_ADDRESS = 4;
 
     /** @var int */
     protected $flags = self::IGNORE_NONE;
@@ -45,6 +46,12 @@ class Beautifier
 
     /** @var string[] */
     protected $ignores = [];
+
+    /** @var string[] */
+    protected $addresses = ['blok', 'nomor', 'no'];
+
+    /** @var string */
+    protected $addressDelimeters = '/-';
 
     /**
      * Get instance.
@@ -158,6 +165,22 @@ class Beautifier
     }
 
     /**
+     * Is string an address prefix?
+     *
+     * @param string $str Address string
+     * @return bool
+     */
+    protected function isAddreses($str)
+    {
+        $str = strtolower((string) $str);
+        if ('.' === substr($str, -1)) {
+            $str = substr($str, 0, -1);
+        }
+
+        return in_array($str, $this->addresses);
+    }
+
+    /**
      * Extract string based on delimeter.
      *
      * @param string $str
@@ -191,33 +214,19 @@ class Beautifier
      * Beautify a word.
      *
      * @param string $str  The text to beautify
-     * @param int $flags  Ignores flag
      * @return string
      */
-    public function beautifyWord($str, $flags = null)
+    public function beautifyWord($str)
     {
-        if (null === $flags) {
-            $flags = $this->flags;
-        }
-        // exclude from beauty if roman chars is detected
-        if (($flags & static::IGNORE_ROMAN) === static::IGNORE_ROMAN && is_int(Roman::asInteger($str))) {
-            return $str;
-        }
-        // exclude from beauty if found in exception list
-        if (($flags & static::IGNORE_INLIST) === static::IGNORE_INLIST) {
-            if (null !== ($ignored = $this->getIgnored($str))) {
-                return $ignored;
-            }
-        }
-        $s = strtolower($str);
-        for ($i = 0; $i < strlen($s); $i++) {
-            if (!$this->isDelimeter($s[$i])) {
-                $s[$i] = strtoupper($s[$i]);
+        $str = strtolower($str);
+        for ($i = 0; $i < strlen($str); $i++) {
+            if (!$this->isDelimeter($str[$i])) {
+                $str[$i] = strtoupper($str[$i]);
                 break;
             }
         }
 
-        return $s;
+        return $str;
     }
 
     /**
@@ -230,29 +239,50 @@ class Beautifier
     public function doBeautify($str, $flags = null)
     {
         $result = null;
+        if (null === $flags) {
+            $flags = $this->flags;
+        }
+        $whitelist = ($flags & static::IGNORE_INLIST) === static::IGNORE_INLIST;
+        $addresses = ($flags & static::IGNORE_ADDRESS) === static::IGNORE_ADDRESS;
+        $roman = ($flags & static::IGNORE_ROMAN) === static::IGNORE_ROMAN;
+        $prev = $delim = null;
         $str = (string) $str;
         while (true) {
             if (0 === strlen(trim($str))) {
                 break;
             }
-            $word = $this->extract($str);
-            $beautified = $this->beautifyWord($word, $flags);
-            $pos = strpos($str, $word) + strlen($word) + 1;
-            $matched = false;
-            if ($pos >= strlen($str)) {
-                $pos = strlen($str);
-                $matched = true;
+            $word = $beautified = $this->extract($str);
+            switch (true) {
+                case $roman && is_int(Roman::asInteger($word)):
+                    break;
+                case $addresses && $this->isAddreses($prev):
+                    break;
+                case $whitelist && null !== ($ignored = $this->getIgnored($word)):
+                    $beautified = $ignored;
+                    break;
+                default:
+                    $beautified = $this->beautifyWord($word);
             }
-            $tmp = substr($str, 0, $pos);
+            $next = strpos($str, $word) + strlen($word) + 1;
+            if ($next >= strlen($str)) {
+                $next = strlen($str);
+            }
+            $tmp = substr($str, 0, $next);
             if ($word != $beautified) {
                 $tmp = str_replace($word, $beautified, $tmp);
             }
             $result .= $tmp;
-            if (!$matched) {
-                $str = substr($str, $pos);
-            } else {
+            if ($next === strlen($str)) {
                 break;
             }
+            $delim = substr($str, $next - 1, 1);
+            switch (true) {
+                case $addresses && $this->isAddreses($prev) && false !== strpos($this->addressDelimeters, $delim):
+                    break;
+                default:
+                    $prev = $word;
+            }
+            $str = substr($str, $next);
         }
 
         return $result;

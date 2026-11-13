@@ -33,9 +33,11 @@ class BeutifierTest extends TestCase
 {
     public function testBeautify()
     {
+        Beautifier::getInstance()->addIgnore(array('ME', 'YOU'));
         $this->assertEquals('Beautify Me', Beautifier::beautify('BEAUTIFY me'), 'BEAUTIFY me => Beautify Me');
         $this->assertEquals('Year MMIV', Beautifier::beautify('YEAR MMIV', Beautifier::IGNORE_ROMAN), 'Beautify should preserve roman');
-        Beautifier::getInstance()->addIgnore(array('ME', 'YOU'));
+        $this->assertEquals('Perumahan Bumi Indah Blok AC/05B', Beautifier::beautify('PERUMAHAN BUMI INDAH BLOK AC/05B', Beautifier::IGNORE_ADDRESS), 'Beautify should preserve address with / delimiter');
+        $this->assertEquals('Jalan Raden Rahmat No. 125-A', Beautifier::beautify('JALAN RADEN RAHMAT NO. 125-A', Beautifier::IGNORE_ADDRESS), 'Beautify should preserve address with - delimiter');
         $this->assertEquals('Beautify ME And YOU', Beautifier::beautify('BEAUTIFY me and YOU', Beautifier::IGNORE_INLIST), 'Beautify should ignore if text is in exception');
         $this->assertEquals('Beautify ME And YOU Xx', Beautifier::beautify('BEAUTIFY Me and You Xx', Beautifier::IGNORE_INLIST | Beautifier::IGNORE_ROMAN), 'Beautify should ignore if flag specified');
     }
