@@ -37,6 +37,8 @@ class Beautifier
     public const IGNORE_ROMAN = 1;
     public const IGNORE_INLIST = 2;
     public const IGNORE_ADDRESS = 4;
+    public const ROMAN_TOUPPER = 8;
+    public const ADDRESS_TOUPPER = 16;
 
     /** @var int */
     protected $flags = self::IGNORE_NONE;
@@ -245,6 +247,8 @@ class Beautifier
         $whitelist = ($flags & static::IGNORE_INLIST) === static::IGNORE_INLIST;
         $addresses = ($flags & static::IGNORE_ADDRESS) === static::IGNORE_ADDRESS;
         $roman = ($flags & static::IGNORE_ROMAN) === static::IGNORE_ROMAN;
+        $addressesToUpper = ($flags & static::ADDRESS_TOUPPER) === static::ADDRESS_TOUPPER;
+        $romanToUpper = ($flags & static::ROMAN_TOUPPER) === static::ROMAN_TOUPPER;
         $prev = $delim = null;
         $str = (string) $str;
         while (true) {
@@ -254,8 +258,14 @@ class Beautifier
             $word = $beautified = $this->extract($str);
             switch (true) {
                 case $roman && is_int(Roman::asInteger($word)):
+                    if ($romanToUpper) {
+                        $beautified = strtoupper($word);
+                    }
                     break;
                 case $addresses && $this->isAddreses($prev):
+                    if ($addressesToUpper) {
+                        $beautified = strtoupper($word);
+                    }
                     break;
                 case $whitelist && null !== ($ignored = $this->getIgnored($word)):
                     $beautified = $ignored;
