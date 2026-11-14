@@ -46,6 +46,9 @@ class BeutifierTest extends TestCase
         $this->assertEquals('Jalan Raden Rahmat VIII No. 125-A',
             Beautifier::beautify('JALAN RADEN RAHMAT VIII NO. 125-A', Beautifier::IGNORE_ADDRESS | Beautifier::IGNORE_ROMAN),
             'Beautify should preserve address with - delimiter');
+        $this->assertEquals('Sekolah Dasar (SD) Insan Mulia',
+            Beautifier::beautify('sekolah dasar (sd) insan mulia', Beautifier::IGNORE_ABBREVIATION | Beautifier::ABBREVIATION_TOUPPER),
+            'Beautify should honour abbreviation');
         $this->assertEquals('Beautify ME And YOU',
             Beautifier::beautify('BEAUTIFY me and YOU', Beautifier::IGNORE_INLIST),
             'Beautify should ignore if text is in exception');

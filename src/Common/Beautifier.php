@@ -33,12 +33,14 @@ namespace NTLAB\Lib\Common;
  */
 class Beautifier
 {
-    public const IGNORE_NONE = 0;
-    public const IGNORE_ROMAN = 1;
-    public const IGNORE_INLIST = 2;
-    public const IGNORE_ADDRESS = 4;
-    public const ROMAN_TOUPPER = 8;
-    public const ADDRESS_TOUPPER = 16;
+    public const IGNORE_NONE = 0x00;
+    public const IGNORE_INLIST = 0x01;
+    public const IGNORE_ROMAN = 0x02;
+    public const IGNORE_ADDRESS = 0x04;
+    public const IGNORE_ABBREVIATION = 0x08;
+    public const ROMAN_TOUPPER = 0x10;
+    public const ADDRESS_TOUPPER = 0x20;
+    public const ABBREVIATION_TOUPPER = 0x40;
 
     /** @var int */
     protected $flags = self::IGNORE_NONE;
@@ -183,6 +185,18 @@ class Beautifier
     }
 
     /**
+     * Is string an encloser?
+     *
+     * @param string $opening Opening parenthesis
+     * @param string $closing Closing parenthesis
+     * @return bool
+     */
+    protected function isEnclosed($opening, $closing)
+    {
+        return implode([$opening, $closing]) === '()';
+    }
+
+    /**
      * Extract string based on delimeter.
      *
      * @param string $str
@@ -247,8 +261,10 @@ class Beautifier
         $whitelist = ($flags & static::IGNORE_INLIST) === static::IGNORE_INLIST;
         $addresses = ($flags & static::IGNORE_ADDRESS) === static::IGNORE_ADDRESS;
         $roman = ($flags & static::IGNORE_ROMAN) === static::IGNORE_ROMAN;
+        $abbvr = ($flags & static::IGNORE_ABBREVIATION) === static::IGNORE_ABBREVIATION;
         $addressesToUpper = ($flags & static::ADDRESS_TOUPPER) === static::ADDRESS_TOUPPER;
         $romanToUpper = ($flags & static::ROMAN_TOUPPER) === static::ROMAN_TOUPPER;
+        $abbvrToUpper = ($flags & static::ABBREVIATION_TOUPPER) === static::ABBREVIATION_TOUPPER;
         $prev = $delim = null;
         $str = (string) $str;
         while (true) {
@@ -256,6 +272,8 @@ class Beautifier
                 break;
             }
             $word = $beautified = $this->extract($str);
+            $pos = strpos($str, $word);
+            $next = $pos + strlen($word) + 1;
             switch (true) {
                 case $roman && is_int(Roman::asInteger($word)):
                     if ($romanToUpper) {
@@ -267,13 +285,17 @@ class Beautifier
                         $beautified = strtoupper($word);
                     }
                     break;
+                case $abbvr && $this->isEnclosed(substr($str, $pos, 1), substr($str, $next - 1, 1)):
+                    if ($abbvrToUpper) {
+                        $beautified = strtoupper($word);
+                    }
+                    break;
                 case $whitelist && null !== ($ignored = $this->getIgnored($word)):
                     $beautified = $ignored;
                     break;
                 default:
                     $beautified = $this->beautifyWord($word);
             }
-            $next = strpos($str, $word) + strlen($word) + 1;
             if ($next >= strlen($str)) {
                 $next = strlen($str);
             }
